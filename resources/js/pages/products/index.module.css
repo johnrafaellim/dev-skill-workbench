@@ -1,0 +1,17 @@
+@reference "../../../css/app.css";
+
+.table {
+    @apply w-full table-auto;
+}
+
+.table thead tr {
+    @apply bg-primary text-white;
+}
+
+.table thead tr th {
+    @apply p-4 border;
+}
+
+.table tbody tr td {
+    @apply px-4 py-2 text-center border;
+}
