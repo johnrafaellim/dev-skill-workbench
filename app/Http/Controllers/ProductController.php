@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductFormRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,7 +14,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Inertia::render('products/index');
+        return Inertia::render('products/index', [
+            'data' => Product::all()
+        ]);
     }
 
     /**
@@ -27,9 +30,25 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductFormRequest $request)
     {
-        //
+        $path = null;
+        $originalName = null;
+
+        if ($request->hasFile('featured_image')) {
+            $path = $request->file('featured_image')->store('products', 'public');
+            $originalName = $request->file('featured_image')->getClientOriginalName();
+        }
+
+        Product::create([
+            'name' => $request->validated('name'),
+            'description' => $request->validated('description'),
+            'price' => $request->validated('price'),
+            'featured_image' => $path,
+            'featured_image_original_name' => $originalName,
+        ]);
+
+        return redirect()->route('products.index');
     }
 
     /**

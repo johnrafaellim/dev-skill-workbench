@@ -13,4 +13,8 @@ class Product extends Model
         'featured_image',
         'featured_image_original_name',
     ];
+
+    public function fetchAllProducts() {
+        return $this->orderBy('created_at', 'desc')->get();
+    }
 }

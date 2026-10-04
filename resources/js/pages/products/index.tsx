@@ -3,7 +3,21 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { create } from '@/routes/products';
 import styles from "./index.module.css";
 
-export default function Index() {
+type Product = {
+    id: number;
+    name: string;
+    description: string;
+    price: string;
+    featured_image: string | null;
+    featured_image_original_name: string | null;
+    created_at: string;
+    updated_at: string;
+};
+type Props = {
+    data: Product[];
+};
+
+export default function Index({ data }: Props) {
     return (
         <>
             <Head title="Products" />
@@ -25,15 +39,26 @@ export default function Index() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Mobile Phone</td>
-                                <td>Mobile Phone Description</td>
-                                <td>1200</td>
-                                <td>#</td>
-                                <td>2025-04-01</td>
-                                <td>#</td>
-                            </tr>
+                            {data.map((product) => (
+                                <tr key={product.id}>
+                                    <td>{product.id}</td>
+                                    <td>{product.name}</td>
+                                    <td>{product.description}</td>
+                                    <td>{product.price}</td>
+                                    <td>
+                                        {product.featured_image ? (
+                                            <img
+                                                src={`/storage/${product.featured_image}`}
+                                                alt={product.featured_image_original_name ?? product.name}
+                                                className="max-w-30"
+                                            />
+                                        ) : (
+                                            <span>—</span>
+                                        )}
+                                    </td>
+                                    <td>{product.created_at}</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
