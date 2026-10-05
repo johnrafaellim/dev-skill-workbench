@@ -118,6 +118,15 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        if ($product) {
+            $product->delete();
+
+            Inertia::flash('toast', ['type' => 'success', 'message' => __('Product deleted.')]);
+
+            return to_route('products.index');
+        } else {
+            Inertia::flash('toast', ['type' => 'error', 'message' => __('Unable to delete product. Please try again!')]);
+            return back();
+        }
     }
 }

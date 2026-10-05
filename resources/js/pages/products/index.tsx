@@ -4,6 +4,8 @@ import styles from "./index.module.css";
 import type { Product } from '@/types/product';
 import { formatIsoString } from '@/lib/utils';
 import { EyeIcon, Pencil, Trash } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import ProductController from '@/actions/App/Http/Controllers/ProductController';
 
 type Props = {
     data: Product[];
@@ -55,9 +57,28 @@ export default function Index({ data }: Props) {
                                     <td>{formatIsoString(product.created_at, 'en-PH', options)}</td>
                                     <td>
                                         <div className="flex justify-around">
-                                            <Link className="cursor-pointer hover:opacity-50" href={show({ id: product.id })}><EyeIcon size={15} /></Link>
-                                            <Link className="cursor-pointer hover:opacity-50" href={edit({ id: product.id })}><Pencil size={15} /></Link>
-                                            <Link className="cursor-pointer hover:opacity-50" href={destroy({ id: product.id })}><Trash size={15} /></Link>
+                                            <Link
+                                                className="cursor-pointer hover:opacity-50"
+                                                href={show({ id: product.id })}
+                                            >
+                                                <EyeIcon size={15} />
+                                            </Link>
+                                            <Link
+                                                className="cursor-pointer hover:opacity-50"
+                                                href={edit({ id: product.id })}
+                                            >
+                                                <Pencil size={15} />
+                                            </Link>
+                                            <Link
+                                                href={ProductController.destroy({ product: product.id })}
+                                                method="delete"
+                                                as="button"
+                                                type="button"
+                                                className="cursor-pointer hover:opacity-50"
+                                                onBefore={() => confirm("Are you sure you want to delete this product?")}
+                                            >
+                                                <Trash size={15} />
+                                            </Link>
                                         </div>
                                     </td>
                                 </tr>
