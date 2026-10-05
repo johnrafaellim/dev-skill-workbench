@@ -1,23 +1,19 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-import { create } from '@/routes/products';
+import { create, edit, show, destroy } from '@/routes/products';
 import styles from "./index.module.css";
+import type { Product } from '@/types/product';
+import { formatIsoString } from '@/lib/utils';
+import { EyeIcon, Pencil, Trash } from 'lucide-react';
 
-type Product = {
-    id: number;
-    name: string;
-    description: string;
-    price: string;
-    featured_image: string | null;
-    featured_image_original_name: string | null;
-    created_at: string;
-    updated_at: string;
-};
 type Props = {
     data: Product[];
 };
 
 export default function Index({ data }: Props) {
+    const options: Intl.DateTimeFormatOptions = {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+    };
     return (
         <>
             <Head title="Products" />
@@ -39,9 +35,9 @@ export default function Index({ data }: Props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map((product) => (
-                                <tr key={product.id}>
-                                    <td>{product.id}</td>
+                            {data.map((product, index) => (
+                                <tr key={index}>
+                                    <td>{index + 1}</td>
                                     <td>{product.name}</td>
                                     <td>{product.description}</td>
                                     <td>{product.price}</td>
@@ -49,14 +45,21 @@ export default function Index({ data }: Props) {
                                         {product.featured_image ? (
                                             <img
                                                 src={`/storage/${product.featured_image}`}
-                                                alt={product.featured_image_original_name ?? product.name}
-                                                className="max-w-30"
+                                                alt={product.name}
+                                                className="max-w-20"
                                             />
                                         ) : (
                                             <span>—</span>
                                         )}
                                     </td>
-                                    <td>{product.created_at}</td>
+                                    <td>{formatIsoString(product.created_at, 'en-PH', options)}</td>
+                                    <td>
+                                        <div className="flex justify-around">
+                                            <Link className="cursor-pointer hover:opacity-50" href={show({ id: product.id })}><EyeIcon size={15} /></Link>
+                                            <Link className="cursor-pointer hover:opacity-50" href={edit({ id: product.id })}><Pencil size={15} /></Link>
+                                            <Link className="cursor-pointer hover:opacity-50" href={destroy({ id: product.id })}><Trash size={15} /></Link>
+                                        </div>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

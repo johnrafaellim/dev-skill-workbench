@@ -1,6 +1,7 @@
 import { Form, Head, Link, router, useForm } from '@inertiajs/react';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-import { index, create, store } from '@/routes/products';
+import { index } from '@/routes/products';
+import ProductController from '@/actions/App/Http/Controllers/ProductController';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -8,15 +9,42 @@ import { TextArea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import InputError from '@/components/input-error';
+import type { Product } from '@/types/product';
+import type { BreadcrumbItem } from '@/types';
+import AppLayout from '@/layouts/app-layout';
+import { usePage } from '@inertiajs/react';
 
+type Mode = 'create' | 'view' | 'edit';
 
-export default function Create() {
+interface Props {
+    product: Product
+    mode: Mode
+}
+
+export default function ProductForm({ product, mode }: Props) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        'name': '',
-        'description': '',
-        'price': '',
+        'name': product?.name ?? '',
+        'description': product?.description ?? '',
+        'price': product?.price ?? '',
         'featured_image': null as File | null
     });
+
+    const isView = mode === 'view';
+    const isEdit = mode === 'edit';
+    const isCreate = mode === 'create';
+
+    // Dynamic Title based on Mode
+    const title =
+        mode === 'create'
+            ? 'Add Product'
+            : mode === 'edit'
+                ? `Edit ${product?.name ?? 'Product'}`
+                : product?.name ?? 'View Product';
+
+    // Form submit endpoint based on mode
+    const formAction = isEdit && product
+        ? ProductController.update({ product: product.id })
+        : ProductController.store.form();
 
     return (
         <>
@@ -27,11 +55,11 @@ export default function Create() {
                 </div>
                 <Card>
                     <CardHeader>
-                        <CardTitle>Add Product</CardTitle>
+                        <CardTitle>{title}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <Form
-                            {...store.form()}
+                            {...formAction}
                             disableWhileProcessing
                             className="flex flex-col gap-4" autoComplete='off'
                         >
@@ -48,7 +76,9 @@ export default function Create() {
                                                 placeholder='Product Name'
                                                 autoFocus
                                                 tabIndex={1}
+                                                value={data.name}
                                                 onChange={(e) => setData('name', e.target.value)}
+                                                disabled={isView}
                                             />
                                             <InputError message={errors.name} />
                                         </div>
@@ -62,7 +92,9 @@ export default function Create() {
                                                 cols={60}
                                                 tabIndex={2}
                                                 placeholder="Product Description"
+                                                value={data.description}
                                                 onChange={(e) => setData('description', e.target.value)}
+                                                disabled={isView}
                                             />
                                             <InputError message={errors.description} />
                                         </div>
@@ -75,7 +107,9 @@ export default function Create() {
                                                 type="text"
                                                 placeholder='Product Price'
                                                 tabIndex={3}
+                                                value={data.price}
                                                 onChange={(e) => setData('price', e.target.value)}
+                                                disabled={isView}
                                             />
                                             <InputError message={errors.price} />
                                         </div>
@@ -88,6 +122,7 @@ export default function Create() {
                                                 type="file"
                                                 tabIndex={4}
                                                 accept="image/jpeg,image/png,image/jpg,image/gif"
+                                                disabled={isView}
                                             />
                                             <InputError message={errors.featured_image} />
                                         </div>
@@ -96,15 +131,19 @@ export default function Create() {
                                             <progress value={progress.percentage} max={100} />
                                         )}
 
-                                        <Button
-                                            type="submit"
-                                            className="w-fit cursor-pointer hover:opacity-90"
-                                            tabIndex={5}
-                                            data-test="login-button"
-                                        >
-                                            {processing && <Spinner />}
-                                            Save Product
-                                        </Button>
+                                        {
+                                            !isView && (
+                                                <Button
+                                                    type="submit"
+                                                    className="w-fit cursor-pointer hover:opacity-90"
+                                                    tabIndex={5}
+                                                    data-test="login-button"
+                                                >
+                                                    {processing && <Spinner />}
+                                                    {isEdit ? 'Update' : 'Save'} Product
+                                                </Button>
+                                            )
+                                        }
                                     </div>
                                 </>
                             )}
@@ -116,15 +155,36 @@ export default function Create() {
     );
 }
 
-Create.layout = {
-    breadcrumbs: [
+/**
+ * Inner component to dynamically extract props using Inertia's usePage hook
+ */
+function ProductFormLayout({ children }: { children: React.ReactNode }) {
+    const { props } = usePage<{ product?: Product; mode: Mode }>();
+    const { product, mode } = props;
+
+    const dynamicTitle =
+        mode === 'create'
+            ? 'Add Product'
+            : mode === 'edit'
+                ? `Edit ${product?.name ?? 'Product'}`
+                : product?.name ?? 'View Product';
+
+    const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Products',
             href: index(),
         },
         {
-            title: 'Add Product',
-            href: create(),
+            title: dynamicTitle,
+            href: '#',
         },
-    ],
-};
+    ];
+
+    return <AppLayout breadcrumbs={breadcrumbs}>{children}</AppLayout>;
+}
+
+// Set the layout wrapper
+ProductForm.layout = (page: React.ReactNode) => (
+    <ProductFormLayout>{page}</ProductFormLayout>
+);
+

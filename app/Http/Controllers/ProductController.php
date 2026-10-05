@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductFormRequest;
 use App\Models\Product;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -15,7 +18,7 @@ class ProductController extends Controller
     public function index()
     {
         return Inertia::render('products/index', [
-            'data' => Product::all()
+            'data' => Product::latest()->get()
         ]);
     }
 
@@ -24,31 +27,39 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return Inertia::render('products/create');
+        return Inertia::render('products/product-form', [
+            'mode' => 'create',
+            'product' => null,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductFormRequest $request)
+    public function store(ProductFormRequest $request): RedirectResponse
     {
-        $path = null;
-        $originalName = null;
+        try {
+            $attributes = $request->safe()->except('featured_image');
 
-        if ($request->hasFile('featured_image')) {
-            $path = $request->file('featured_image')->store('products', 'public');
-            $originalName = $request->file('featured_image')->getClientOriginalName();
+            if ($request->hasFile('featured_image')) {
+                $file = $request->file('featured_image');
+                $attributes['featured_image'] = $file->store('products', 'public');
+                $attributes['featured_image_original_name'] = $file->getClientOriginalName();
+            }
+
+            $product = Product::create($attributes);
+
+            if ($product) {
+                Inertia::flash('toast', ['type' => 'success', 'message' => __('Product created.')]);
+
+                return to_route('products.index');
+            }
+
+            return back();
+        } catch (Exception $e) {
+            Log::error('Product creation failed: ' . $e->getMessage());
+            return back();
         }
-
-        Product::create([
-            'name' => $request->validated('name'),
-            'description' => $request->validated('description'),
-            'price' => $request->validated('price'),
-            'featured_image' => $path,
-            'featured_image_original_name' => $originalName,
-        ]);
-
-        return redirect()->route('products.index');
     }
 
     /**
@@ -56,7 +67,10 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return Inertia::render('products/product-form', [
+            'mode' => 'view',
+            'product' => $product
+        ]);
     }
 
     /**
@@ -64,7 +78,10 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return Inertia::render('products/product-form', [
+            'mode' => 'edit',
+            'product' => $product
+        ]);
     }
 
     /**
