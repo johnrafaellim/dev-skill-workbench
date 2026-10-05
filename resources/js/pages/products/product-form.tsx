@@ -43,7 +43,7 @@ export default function ProductForm({ product, mode }: Props) {
 
     // Form submit endpoint based on mode
     const formAction = isEdit && product
-        ? ProductController.update({ product: product.id })
+        ? ProductController.update.form({ product: product.id })
         : ProductController.store.form();
 
     return (
@@ -78,7 +78,7 @@ export default function ProductForm({ product, mode }: Props) {
                                                 tabIndex={1}
                                                 value={data.name}
                                                 onChange={(e) => setData('name', e.target.value)}
-                                                disabled={isView}
+                                                disabled={isView || processing}
                                             />
                                             <InputError message={errors.name} />
                                         </div>
@@ -94,7 +94,7 @@ export default function ProductForm({ product, mode }: Props) {
                                                 placeholder="Product Description"
                                                 value={data.description}
                                                 onChange={(e) => setData('description', e.target.value)}
-                                                disabled={isView}
+                                                disabled={isView || processing}
                                             />
                                             <InputError message={errors.description} />
                                         </div>
@@ -109,23 +109,37 @@ export default function ProductForm({ product, mode }: Props) {
                                                 tabIndex={3}
                                                 value={data.price}
                                                 onChange={(e) => setData('price', e.target.value)}
-                                                disabled={isView}
+                                                disabled={isView || processing}
                                             />
                                             <InputError message={errors.price} />
                                         </div>
 
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="featured_image">Featured Image</Label>
-                                            <Input
-                                                id="featured_image"
-                                                name="featured_image"
-                                                type="file"
-                                                tabIndex={4}
-                                                accept="image/jpeg,image/png,image/jpg,image/gif"
-                                                disabled={isView}
-                                            />
-                                            <InputError message={errors.featured_image} />
-                                        </div>
+                                        {
+                                            !isView ? (
+                                                <div className="grid gap-2">
+                                                    <Label htmlFor="featured_image">Featured Image</Label>
+                                                    <Input
+                                                        id="featured_image"
+                                                        name="featured_image"
+                                                        type="file"
+                                                        tabIndex={4}
+                                                        accept="image/jpeg,image/png,image/jpg,image/gif"
+                                                        disabled={isView || processing}
+                                                    />
+                                                    <InputError message={errors.featured_image} />
+                                                </div>
+                                            ) : (
+                                                <div className="grid gap-2">
+                                                    <Label htmlFor="featured_image">Featured Image</Label>
+                                                    <img
+                                                        src={`/storage/${product.featured_image}`}
+                                                        alt={product?.name ?? data.name}
+                                                        className="h-40 rounded-lg border object-cover"
+                                                    />
+                                                </div>
+                                            )
+                                        }
+
 
                                         {progress && (
                                             <progress value={progress.percentage} max={100} />
@@ -140,7 +154,7 @@ export default function ProductForm({ product, mode }: Props) {
                                                     data-test="login-button"
                                                 >
                                                     {processing && <Spinner />}
-                                                    {isEdit ? 'Update' : 'Save'} Product
+                                                    {processing ? (isEdit ? 'Updating...' : 'Creating...') : isEdit ? 'Update' : 'Create'} Product
                                                 </Button>
                                             )
                                         }

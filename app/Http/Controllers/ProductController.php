@@ -87,9 +87,30 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductFormRequest $request, Product $product)
     {
-        //
+        if ($product) {
+            $product->name = $request->name;
+            $product->description = $request->description;
+            $product->price = $request->price;
+
+            if ($request->hasFile('featured_image')) {
+                $file = $request->file('featured_image');
+                $attributes['featured_image'] = $file->store('products', 'public');
+                $attributes['featured_image_original_name'] = $file->getClientOriginalName();
+                $product->featured_image = $attributes['featured_image'];
+                $product->featured_image_original_name = $attributes['featured_image_original_name'];
+            }
+
+            $product->save();
+
+            Inertia::flash('toast', ['type' => 'success', 'message' => __('Product updated.')]);
+
+            return to_route('products.index');
+        } else {
+            Inertia::flash('toast', ['type' => 'error', 'message' => __('Unable to update product. Please try again!')]);
+            return back();
+        }
     }
 
     /**
