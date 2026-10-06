@@ -1,0 +1,18 @@
+{
+  "applications": [
+    {
+      "id": 1,
+      "company": "Vue Company",
+      "role": "Senior Vue.js Developer",
+      "status": "applied",
+      "appliedDate": "2026-06-29"
+    },
+    {
+      "id": 2,
+      "company": "React Company",
+      "role": "Senior React.js Developer",
+      "status": "applied",
+      "appliedDate": "2026-06-30"
+    }
+  ]
+}
