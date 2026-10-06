@@ -1,0 +1,93 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Job Tracker API",
+    "description": "REST API for managing job applications",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "produces": ["application/json"],
+  "paths": {
+    "/applications": {
+      "get": {
+        "tags": ["Applications"],
+        "summary": "Get all applications",
+        "description": "Returns all job applications",
+        "responses": {
+          "200": {
+            "description": "Applications retrieved successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/applications/{id}": {
+      "get": {
+        "tags": ["Applications"],
+        "summary": "Get application by ID",
+        "description": "Returns a single job application",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Application ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "company": {
+                      "type": "string",
+                      "example": "Meta"
+                    },
+                    "role": {
+                      "type": "string",
+                      "example": "SWE"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "applied"
+                    },
+                    "appliedDate": {
+                      "type": "string",
+                      "example": "2026-06-29"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Application not found"
+          }
+        }
+      }
+    }
+  }
+}
