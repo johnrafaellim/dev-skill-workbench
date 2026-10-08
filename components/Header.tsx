@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import { cn } from "cn";
 import { buttonVariants } from "./ui/button";
+import CustomButton from "./CustomButton";
 
 const Header = () => {
   return (
@@ -39,6 +40,7 @@ const Header = () => {
         </nav>
         <UserDropdown />
         {/* <SignOutButton /> */}
+        <CustomButton />
       </SignedIn>
       <SignedOut>
         <nav className="ml-auto flex items-center gap-2">
