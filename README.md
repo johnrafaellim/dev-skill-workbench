@@ -23,7 +23,7 @@ Examples:
 
 - `laravel-react-crud-product-management` — Laravel + React practice project
 - `nodejs-job-tracker-api` — Node.js API practice project
-- `nextjs-authentication-ws02` — Next.js Authentication(WS02)(WIP)
+- `nextjs-authentication-ws02` — Next.js Authentication(WS02)
 
 Each branch may contain its own `README.md` with more information about the specific project.
 
