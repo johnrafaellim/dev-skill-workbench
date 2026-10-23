@@ -1,12 +1,19 @@
 import Input from "../components/ui/Input.jsx";
 import Button from "../components/ui/Button.jsx";
 import {useForm} from "react-hook-form";
+import {useContext} from "react";
+import {AuthStore} from "../context/AuthContext.jsx";
+import {useNavigate} from "react-router-dom";
 
 function Login() {
     const { register, handleSubmit } = useForm();
+    const navigate = useNavigate();
+
+    const { login } = useContext(AuthStore);
 
     function handleData(data){
-        console.log(data)
+        login(data)
+        navigate('/');
     }
 
     return (
