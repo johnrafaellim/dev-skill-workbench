@@ -1,6 +1,7 @@
 import MainLayout from "../layouts/MainLayout.jsx";
 import Home from '../pages/Home';
 import About from '../pages/About';
+import Login from "../pages/Login.jsx";
 
 export const appRoutes = [
     {
@@ -16,5 +17,9 @@ export const appRoutes = [
                 element: <About />,
             }
         ]
+    },
+    {
+        path: '/login',
+        element: <Login />,
     }
 ];
