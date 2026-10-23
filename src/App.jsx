@@ -1,12 +1,8 @@
-import React from 'react'
+import { useRoutes } from 'react-router-dom';
+import { appRoutes } from './routes/appRoutes.jsx'
 
 function App() {
-    return (
-        <div>
-          App
-          <i className="ri-arrow-right-line"></i>
-        </div>
-    )
+    return useRoutes(appRoutes);
 }
 
-export default App
+export default App;
