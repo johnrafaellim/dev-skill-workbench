@@ -1,0 +1,6 @@
+{"timestamp":"00:00:00.543","source":"Server","level":"LOG","message":"- Cache Components enabled"}
+{"timestamp":"00:00:00.543","source":"Server","level":"LOG","message":"- Partial Prefetching enabled"}
+{"timestamp":"00:00:00.544","source":"Server","level":"LOG","message":"- Experiments (use with caution):"}
+{"timestamp":"00:00:00.544","source":"Server","level":"LOG","message":"  ✓ agentFeedback"}
+{"timestamp":"00:00:00.544","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:01:00.017","source":"Server","level":"WARN","message":"2026-10-23T03:24:16.989Z WARN [Better Auth]: Invalid password"}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 19, "column": 0}, "map": {"version":3,"sources":["file:///Users/raffy/Desktop/better-auth-1/app/favicon.ico.mjs%20(structured%20image%20object)"],"sourcesContent":["import src from \"IMAGE\";\nexport default { src, width: 48, height: 48 }\n"],"names":["src","width","height"],"mappings":";;;;AAAA;;uCACe;IAAEA,KAAAA,mIAAG;IAAEC,OAAO;IAAIC,QAAQ;AAAG"}},
+    {"offset": {"line": 34, "column": 0}, "map": {"version":3,"sources":["file:///Users/raffy/Desktop/better-auth-1/app/page.tsx"],"sourcesContent":["import Link from \"next/link\";\n\nexport default function Home() {\n  return (\n      <main>\n        <br />\n        <h1>Better Auth</h1>\n\n        <Link href=\"/login\">Login</Link>\n        <Link href=\"/signup\">Sign up</Link>\n      </main>\n  )\n}"],"names":["Home","href"],"mappings":";;;;;AAAA;;;AAEe,SAASA;IACtB,qBACI,8OAAC;;0BACC,8OAAC;;;;;0BACD,8OAAC;0BAAG;;;;;;0BAEJ,8OAAC,0LAAI;gBAACC,MAAK;0BAAS;;;;;;0BACpB,8OAAC,0LAAI;gBAACA,MAAK;0BAAU;;;;;;;;;;;;AAG7B"}}]
+}

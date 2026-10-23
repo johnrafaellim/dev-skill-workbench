@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 100, "column": 0}, "map": {"version":3,"sources":["file:///Users/raffy/Desktop/better-auth-1/app/api/auth/[...all]/route.ts"],"sourcesContent":["import { auth } from \"@/lib/auth\";\nimport { toNextJsHandler } from \"better-auth/next-js\";\n\nexport const { GET, POST } = toNextJsHandler(auth);"],"names":["GET","POST"],"mappings":";;;;;;AAAA;AACA;;;AAEO,MAAM,EAAEA,GAAG,EAAEC,IAAI,EAAE,GAAG,IAAA,0LAAe,EAAC,qHAAI"}},
+    {"offset": {"line": 115, "column": 0}, "map": {"version":3,"sources":["file:///Users/raffy/Desktop/better-auth-1/lib/auth.ts"],"sourcesContent":["import { betterAuth } from \"better-auth\";\nimport { nextCookies } from \"better-auth/next-js\";\nimport Database from \"better-sqlite3\";\n\n\nexport const auth = betterAuth({\n    database: new Database(\"./sqlite.db\"),\n    emailAndPassword: {\n        enabled: true\n    },\n    plugins: [nextCookies()],\n});"],"names":["auth","database","emailAndPassword","enabled","plugins"],"mappings":";;;;AAAA;AACA;AACA;;;;AAGO,MAAMA,OAAO,IAAA,uKAAU,EAAC;IAC3BC,UAAU,IAAI,8LAAQ,CAAC;IACvBC,kBAAkB;QACdC,SAAS;IACb;IACAC,SAAS;QAAC,IAAA,sLAAW;KAAG;AAC5B"}}]
+}

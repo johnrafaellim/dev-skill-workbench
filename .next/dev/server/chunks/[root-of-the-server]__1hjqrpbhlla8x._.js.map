@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 106, "column": 0}, "map": {"version":3,"sources":["file:///Users/raffy/Desktop/better-auth-1/proxy.ts"],"sourcesContent":["import { getSessionCookie } from \"better-auth/cookies\";\nimport { NextRequest, NextResponse } from \"next/server\";\n\nexport function proxy(request: NextRequest) {\n    const sessionCookie = getSessionCookie(request);\n\n    if (!sessionCookie && request.nextUrl.pathname.startsWith(\"/dashboard\")) {\n        return NextResponse.redirect(new URL(\"/login\", request.url));\n    }\n\n    return NextResponse.next();\n}\n\nexport const config = {\n    matcher: [\"/dashboard/:path*\"],\n};"],"names":["proxy","request","sessionCookie","nextUrl","pathname","startsWith","redirect","URL","url","next","config","matcher"],"mappings":";;;;;;AAAA;AACA;;;AAEO,SAASA,MAAMC,OAAoB;IACtC,MAAMC,gBAAgB,IAAA,+LAAgB,EAACD;IAEvC,IAAI,CAACC,iBAAiBD,QAAQE,OAAO,CAACC,QAAQ,CAACC,UAAU,CAAC,eAAe;QACrE,OAAO,8IAAY,CAACC,QAAQ,CAAC,IAAIC,IAAI,UAAUN,QAAQO,GAAG;IAC9D;IAEA,OAAO,8IAAY,CAACC,IAAI;AAC5B;AAEO,MAAMC,SAAS;IAClBC,SAAS;QAAC;KAAoB;AAClC"}}]
+}
