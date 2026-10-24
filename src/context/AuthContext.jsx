@@ -11,7 +11,7 @@ function AuthContext({children}) {
     }
 
     return (
-        <AuthStore.Provider value={{user, login}}>{children}haha</AuthStore.Provider>
+        <AuthStore.Provider value={{user, login}}>{children}</AuthStore.Provider>
     )
 }
 
